@@ -12,7 +12,7 @@ class WidgetExpenseChart extends ChartWidget
     protected static ?string $heading = 'Pengeluaran Chart';
 
     protected function getData(): array
-    {
+    {       
         $data = Trend::model(Transaction::class)
             ->query(
                 Transaction::expenses()
