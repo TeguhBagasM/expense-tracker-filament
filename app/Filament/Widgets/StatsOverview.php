@@ -21,8 +21,8 @@ class StatsOverview extends BaseWidget
             Carbon::parse($this->filters['endDate']) :
             now();
             
-        $pemasukan = Transaction::incomes()->get()->whereBetween('date_transaction', [$startDate, $endDate])->sum('amount');
-        $pengeluaran = Transaction::expenses()->get()->whereBetween('date_transaction', [$startDate, $endDate])->sum('amount');
+        $pemasukan = Transaction::incomes()->whereBetween('date_transaction', [$startDate, $endDate])->sum('amount');
+        $pengeluaran = Transaction::expenses()->whereBetween('date_transaction', [$startDate, $endDate])->sum('amount');
         $selisih = $pemasukan - $pengeluaran;
         return [
             Stat::make('Total Pemasukan', 'Rp. ' . $pemasukan),
