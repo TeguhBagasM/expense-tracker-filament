@@ -7,6 +7,7 @@ use Filament\Widgets\ChartWidget;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
+use Illuminate\Support\Carbon;
 
 class WidgetExpenseChart extends ChartWidget
 {
@@ -17,13 +18,21 @@ class WidgetExpenseChart extends ChartWidget
 
     protected function getData(): array
     {       
+        $startDate = ! is_null($this->filters['startDate'] ?? null) ?
+            Carbon::parse($this->filters['startDate']) :
+            now()->startOfYear();
+
+        $endDate = ! is_null($this->filters['endDate'] ?? null) ?
+            Carbon::parse($this->filters['endDate']) :
+            now();
+            
         $data = Trend::model(Transaction::class)
             ->query(
                 Transaction::expenses()
             )
             ->between(
-                start: now()->startOfYear(),
-                end: now()->endOfYear(),
+                start: $startDate,
+                end: $endDate,
             )
             ->perDay()
             ->sum('amount');
@@ -31,11 +40,15 @@ class WidgetExpenseChart extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Pengeluaran perhari',
+                    'label' => 'Pengeluaran Harian (Rp)',
                     'data' => $data->map(fn (TrendValue $value) => $value->aggregate),
+                    'borderColor' => 'rgb(239, 68, 68)',
+                    'backgroundColor' => 'rgba(239, 68, 68, 0.1)',
+                    'fill' => true,
+                    'tension' => 0.4,
                 ],
             ],
-            'labels' => $data->map(fn (TrendValue $value) => $value->date),
+            'labels' => $data->map(fn (TrendValue $value) => Carbon::parse($value->date)->format('d/m')),
         ];
     }
 
