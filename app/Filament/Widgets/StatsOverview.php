@@ -10,8 +10,8 @@ class StatsOverview extends BaseWidget
 {
     protected function getStats(): array
     {
-        $pemasukan = Transaction::where('is_expense', false)->sum('amount');
-        $pengeluaran = Transaction::where('is_expense', true)->sum('amount');
+        $pemasukan = Transaction::incomes()->get()->sum('amount');
+        $pengeluaran = Transaction::expenses()->get()->sum('amount');
         $selisih = $pemasukan - $pengeluaran;
         return [
             Stat::make('Total Pemasukan', 'Rp. ' . $pemasukan),
