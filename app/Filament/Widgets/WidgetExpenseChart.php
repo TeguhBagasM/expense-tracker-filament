@@ -4,12 +4,16 @@ namespace App\Filament\Widgets;
 
 use App\Models\Transaction;
 use Filament\Widgets\ChartWidget;
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
 
 class WidgetExpenseChart extends ChartWidget
 {
+    use InteractsWithPageFilters;
+
     protected static ?string $heading = 'Pengeluaran Chart';
+    protected static string $color = 'danger';
 
     protected function getData(): array
     {       

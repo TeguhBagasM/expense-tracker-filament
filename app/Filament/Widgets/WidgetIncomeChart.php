@@ -4,12 +4,16 @@ namespace App\Filament\Widgets;
 
 use App\Models\Transaction;
 use Filament\Widgets\ChartWidget;
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
 
 class WidgetIncomeChart extends ChartWidget
 {
+    use InteractsWithPageFilters;
+
     protected static ?string $heading = 'Pemasukan Chart';
+    protected static string $color = 'success';
 
     protected function getData(): array
     {
